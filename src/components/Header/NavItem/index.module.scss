@@ -1,0 +1,27 @@
+@import "assets/styles/variable.scss";
+
+.navItem {
+	display: flex;
+	align-items: center;
+	justify-content: start;
+    transition: filter .2s ease;
+    &:hover {
+        filter: brightness(1.5);    
+    }
+}
+.navIcon {
+	width: 1.5rem;
+	height: 1.5rem;
+    border-radius: 100%;
+    background-color: $mainColorDark;    
+	padding: 0.3rem;
+	& > img,
+	& > svg {
+        height: 100%;
+        width: 100%;
+	}
+}
+
+.navText {
+    margin-left: 0.6rem;
+}

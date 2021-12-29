@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
-import Layout from './containers/layouts'
+import Layout from './views/layouts'
 import routes from './routes'
 
 export default function App() {
@@ -14,9 +14,11 @@ export default function App() {
 					path={route.path}
 					element={
 						isHasLayout.includes(route.path) ? (
-							<Layout>{route.main}</Layout>
+							<Layout type="large">{route.main}</Layout>
 						) : (
-							route.main
+							<Layout type="medium">
+								{route.main}
+							</Layout>
 						)
 					}
 				></Route>

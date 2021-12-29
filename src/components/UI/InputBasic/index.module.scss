@@ -1,0 +1,27 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 1rem;
+}
+
+.title {
+	font-style: normal;
+	font-weight: bold;
+	font-size: 1.125rem;
+	margin-bottom: 0.5rem;
+}
+
+.input {
+	outline: none;
+	border: 1px solid #0F1012;
+	padding: 1rem 1.25rem;
+	border-radius: 0.625rem;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 1.125rem;
+    background: #0F1012;
+    &:placeholder-shown {
+        font-family: 'Rubik';
+        color: rgba(255, 255, 255, 0.7);
+    }
+}

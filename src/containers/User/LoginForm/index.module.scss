@@ -1,0 +1,27 @@
+@import "assets/styles/variable.scss";
+
+.container {
+	padding: 2.5rem 2.25rem;
+	background: $secondColorDark;
+	box-shadow: -0.625rem 0.625rem 0.625rem rgba(0, 0, 0, 0.25);
+	border-radius: 0.625rem;
+    width: 100%;
+	max-width: 28.125rem;
+}
+
+.py {
+    padding: 1rem 0;
+}
+
+.dividerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+.divider {
+    height: 0;
+    border-top: 1px solid $textColor;
+    width: 12rem;
+}

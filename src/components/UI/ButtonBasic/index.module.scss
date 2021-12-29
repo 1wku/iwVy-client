@@ -1,0 +1,28 @@
+.button {
+	font-weight: bold;
+	font-size: 1.125rem;
+	text-align: center;
+	color: #fff;
+    border: none;
+    outline: none;
+    border-radius: 0.625rem;
+	&fat {
+		padding: 1.25rem 4.25rem;
+	}
+	&thin {
+		padding: 1rem 3rem;
+	}
+	&green {
+		background: #42c56a;
+	}
+	&red {
+		background: #df3f30;
+	}
+	&gray {
+		background: #484c52;
+	}
+}
+
+.fullWidth {
+	width: 100%;
+}

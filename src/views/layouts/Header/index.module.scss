@@ -1,0 +1,16 @@
+.heading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 3.75rem;
+	background: rgba(32, 33, 38, 0.7);
+}
+
+.padding {
+	&large {
+		padding: 0 1.125rem;
+	}
+	&medium {
+		padding: 0 9.75rem;
+	}
+}

@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom'
 
+import LoginForm from 'containers/User/LoginForm'
+import LoginBanner from 'components/Image/LoginBanner'
+import styles from './index.module.scss'
 
 export default function Login() {
-    return (
-        <div>
-            <h1>Login Page</h1>
-            <Link to='/register'>Sign up</Link> 
-        </div>
-    )
+	return (
+		<div className={styles.container}>
+			<LoginForm />
+            <LoginBanner /> 
+		</div>
+	)
 }
