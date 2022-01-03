@@ -1,8 +1,17 @@
+import { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { AnimatePresence } from 'framer-motion'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
 import Layout from './views/layouts'
 import routes from './routes'
+import { getMe } from 'data/slices/userSlice'
 
 export default function App() {
+	const dispatch = useDispatch()
+	const navigate = useNavigate()
+
 	const isHasLayout = ['/']
 
 	const RouteContainer = routes => {
@@ -26,10 +35,20 @@ export default function App() {
 		}
 		return result
 	}
-
+	useEffect(() => {
+		const userId = localStorage.getItem('userId')
+		if (!userId) {
+			navigate('/login')
+		} else {
+			dispatch(getMe({ userId }))
+			navigate('/')
+		}
+	}, [dispatch, navigate])
 	return (
 		<div>
-			<Routes>{RouteContainer(routes)}</Routes>
+			<AnimatePresence>
+				<Routes>{RouteContainer(routes)}</Routes>
+			</AnimatePresence>
 		</div>
 	)
 }

@@ -1,7 +1,8 @@
+@import 'assets/styles/variable.scss';
+
 .container {
 	display: flex;
 	flex-direction: column;
-	margin-bottom: 1rem;
 }
 
 .title {
@@ -13,15 +14,37 @@
 
 .input {
 	outline: none;
-	border: 1px solid #0F1012;
+	border: 1px solid $secondColorDark;
 	padding: 1rem 1.25rem;
 	border-radius: 0.625rem;
 	font-style: normal;
-	font-weight: bold;
+	font-weight: normal;
 	font-size: 1.125rem;
-    background: #0F1012;
-    &:placeholder-shown {
-        font-family: 'Rubik';
-        color: rgba(255, 255, 255, 0.7);
-    }
+	font-family: inherit;
+	background: $mainColorDark;
+	color: $textColor;
+	transition: all 0.2s ease;
+	&:placeholder-shown {
+		font-family: inherit;
+	}
+	&:focus {
+		border-color: $borderColor;
+	}
+	&:invalid[focused="true"] {
+		border-color: #fc8477;
+		& ~ .errorMessage {
+			opacity: 1;
+			height: auto;
+		}
+	}
+}
+
+.errorMessage {
+	margin-top: 0.5rem;
+	margin-bottom: 0.5rem;
+	font-size: 0.75rem;
+	color: #fc8477;
+	opacity: 0;
+	height: 0;
+	transition: all 0.2s ease;
 }

@@ -3,9 +3,18 @@
 	font-size: 1.125rem;
 	text-align: center;
 	color: #fff;
-    border: none;
-    outline: none;
-    border-radius: 0.625rem;
+	border: none;
+	outline: none;
+	border-radius: 0.625rem;
+	cursor: pointer;
+	&:hover {
+		box-shadow: -4px 5px 5px 1px #00000040;
+		transform: scale(1.008);
+	}
+	&:active {
+		box-shadow: -3px 4px 4px 0px #00000040;
+		transform: scale(1);
+	}	
 	&fat {
 		padding: 1.25rem 4.25rem;
 	}
@@ -25,4 +34,9 @@
 
 .fullWidth {
 	width: 100%;
+}
+
+.disabled {
+	filter: brightness(0.8);
+	cursor: not-allowed;
 }

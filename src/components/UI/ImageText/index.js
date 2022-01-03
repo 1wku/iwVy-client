@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import styles from './index.module.scss'
 
-export default function index({
+export default function ImageText({
 	image,
 	text,
 	subText,

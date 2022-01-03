@@ -1,0 +1,22 @@
+@import 'assets/styles/variable.scss';
+
+.container {
+	min-width: 15.625rem;
+	height: calc(100vh - 3.85rem);
+	background: $secondColorDark;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+	overflow-y: scroll;
+	&::-webkit-scrollbar {
+		width: 0.2rem;
+	}
+	&::-webkit-scrollbar-track {
+		background: $secondColorDark;
+	}
+	&::-webkit-scrollbar-thumb {
+		background: $textColor20;
+		border-radius: 100rem;
+	}
+}

@@ -2,7 +2,7 @@ import clsx from 'clsx'
 
 import styles from './index.module.scss'
 import mainLogo from 'assets/images/mainLogo.png'
-import ImageText from 'components/UI/ImageText'
+import { ImageText } from 'components/UI'
 import NavList from 'components/Header/NavList'
 import NavItem from 'components/Header/NavItem'
 
@@ -19,8 +19,13 @@ export default function Header({ type, navigators }) {
 			/>
 
 			<NavList>
-				{navigators.map(item => (
-					<NavItem icon={item.icon} text={item.text} path={item.path}/>
+				{navigators.map((item, index) => (
+					<NavItem
+						key={index}
+						icon={item.icon}
+						text={item.text}
+						path={item.path}
+					/>
 				))}
 			</NavList>
 		</div>

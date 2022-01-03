@@ -1,9 +1,15 @@
+import { useSelector } from 'react-redux'
+
 import Header from './Header'
 import Footer from './Footer'
 import githubLogo from 'assets/images/githubLogo.png'
 import { ReactComponent as PersonIcon } from 'assets/icons/person.svg'
 
 export default function Layout({ children, type }) {
+	const userInfo = useSelector(state => state.user.myInfo)
+
+	console.log()
+
 	const navigators = [
 		{
 			path: '/',
@@ -15,9 +21,14 @@ export default function Layout({ children, type }) {
 		},
 		{
 			//! thêm path sau khi có id
-			path: '/:id',
-			text: 'Tien',
-			icon: <PersonIcon />,
+			path: `/${userInfo._id}`,
+			text: userInfo.username || '',
+			icon:
+				userInfo.avatar !== '' ? (
+					<img src={userInfo.avatar} alt="" />
+				) : (
+					<PersonIcon />
+				),
 		},
 	]
 
@@ -42,7 +53,7 @@ export default function Layout({ children, type }) {
 				}
 			/>
 			{children}
-			{type === 'large' && <Footer />}
+			{/* {type === 'large' && <Footer />} */}
 		</>
 	)
 }

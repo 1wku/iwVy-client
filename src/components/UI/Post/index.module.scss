@@ -1,0 +1,15 @@
+@import 'assets/styles/variable.scss';
+
+.container {
+	width: 100%;
+	padding: 1rem 0.875rem;
+	max-width: 31.25rem;
+	margin-bottom: 2.875rem;
+	border-radius: 0.625rem;
+	background-color: $secondColorDark;
+	z-index: 1;
+	backdrop-filter: blur(2.5rem);
+	border: solid 2px transparent;
+	box-shadow: -0.5rem 0.5rem 0.5rem 0.2rem 1px rgba(0, 0, 0, 0.5);
+
+}
