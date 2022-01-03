@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+import { useSelector } from 'react-redux'
 
 import { DropItem, IconWrapper, ImageText } from 'components/UI'
 import Appbar from './Appbar'
@@ -11,6 +12,10 @@ export default function AddPost() {
 	const [open, setOpen] = useState(false)
 	const [value, setValue] = useState('')
 	const [image, setImage] = useState()
+
+	const { username, avatar } = useSelector(
+		state => state.user.myInfo,
+	)
 
 	const inputRef = useRef()
 
@@ -42,10 +47,8 @@ export default function AddPost() {
 			>
 				<ImageText
 					type="avatar"
-					image={
-						'https://i.pinimg.com/originals/1a/e7/53/1ae75336c051202a09eb2c841c588a20.gif'
-					}
-					text="Tien nguyen"
+					image={avatar || ''}
+					text={username || ''}
 				/>
 				<div className={styles.groupIcon}>
 					<IconWrapper

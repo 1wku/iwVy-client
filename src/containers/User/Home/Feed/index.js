@@ -1,4 +1,4 @@
-import { Post } from 'components/UI'
+import  Post  from '../../Post'
 import AddPost from '../AddPost'
 import styles from './index.module.scss'
 

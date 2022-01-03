@@ -1,6 +1,5 @@
 export { default as ButtonBasic } from './ButtonBasic'
 export { default as Divider } from './Divider'
-export { default as Post } from './Post'
 export { default as InputBasic } from './InputBasic'
 export { default as Dropdown } from './Dropdown'
 export { default as DropItem } from './DropItem'

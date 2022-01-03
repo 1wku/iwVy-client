@@ -10,7 +10,12 @@ export default function Home() {
 	const dispatch = useDispatch()
 	const followPosts = useSelector(state => state.post.followPosts)
 
-	const timeline = followPosts
+	const { followings } = useSelector(state => state.user)
+
+	const timeline = followPosts.map(post => ({
+		...followings.filter(user => user._id === post.userId)[0],
+		...post,
+	}))
 
 	useEffect(() => {
 		const userId = localStorage.getItem('userId')

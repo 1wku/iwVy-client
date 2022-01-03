@@ -9,4 +9,11 @@ export const postAPI = {
 			params,
 		)
 	},
+	likePost({ userId, postId }) {
+		console.log({userId, postId})
+		return requestAPI(`/posts/${postId}/like`, 'PUT', { userId })
+	},
+	addPost(body) {
+		return requestAPI('/auth/posts', 'POST', body)
+	},
 }

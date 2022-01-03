@@ -13,7 +13,7 @@ export default function GroupItem({ icon, text, pointer }) {
 			{icon !== '' ? (
 				<img src={icon} className={styles.icon} alt="" />
 			) : (
-				<span  className={styles.iconSvg}>
+				<span  className={clsx(styles.iconSvg)}>
 					<Personicon />
 				</span>
 			)}

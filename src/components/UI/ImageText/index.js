@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { Link } from 'react-router-dom'
 
 import styles from './index.module.scss'
+import { ReactComponent as Personicon } from 'assets/icons/person.svg'
 
 export default function ImageText({
 	image,
@@ -15,17 +16,23 @@ export default function ImageText({
 	return (
 		<Link to={path || '/'}>
 			<div className={styles.container}>
-				<img
-					src={image}
-					alt={''}
-					className={clsx(
-						styles[`image${size || 'medium'}`],
-						{
-							[styles.avatar]: type === 'avatar',
-						},
-					)}
-				/>
-				<div>
+				{image !== '' ? (
+					<img
+						src={image}
+						alt=""
+						className={clsx(
+							styles[`image${size || 'medium'}`],
+							{
+								[styles.avatar]: type === 'avatar',
+							},
+						)}
+					/>
+				) : (
+					<span className={styles.iconSvg}>
+						<Personicon />
+					</span>
+				)}
+				<div className={styles.column}>
 					<span
 						className={styles[`text${size || 'medium'}`]}
 					>
@@ -36,7 +43,7 @@ export default function ImageText({
 							>{`${subText}`}</span>
 						)}
 					</span>
-					{date && <span>{date}</span>}
+					{date && <span className={styles.date}>{date}</span>}
 				</div>
 			</div>
 		</Link>

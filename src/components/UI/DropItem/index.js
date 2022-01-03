@@ -7,15 +7,19 @@ export default function GroupItem({
 	text,
 	pointer,
 	handleClick,
+	autoWidth,
+	liked,
 }) {
 	return (
 		<li
 			className={clsx(styles.container, {
 				[styles.pointer]: pointer,
+				[styles.autoWidth]: autoWidth,
+				[styles.liked]: liked,
 			})}
 			onClick={handleClick}
 		>
-			<span className={styles.text}>{text}</span>
+			<span className={clsx(styles.text)}>{text}</span>
 			<IconWrapper icon={icon} />
 		</li>
 	)

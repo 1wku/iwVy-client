@@ -25,12 +25,25 @@ const handleGetTimeLine = (state, action) => {
 	state.followPosts = action.payload.followPosts.flat(1)
 }
 
+export const likePost = createAsyncThunk(
+	'post/like&dislike',
+	async (data, thunkAPI) => {
+		const res = await postAPI.likePost(data)
+		return res?.data
+	},
+)
+
+const handleLikePost = (state, action) => {
+	console.log(action.payload)
+}
+
 const postSlice = createSlice({
 	name: 'post',
 	initialState,
 	reducers: {},
 	extraReducers: {
 		[getTimeLine.fulfilled]: handleGetTimeLine,
+		[likePost.fulfilled]: handleLikePost,
 	},
 })
 export default postSlice.reducer
