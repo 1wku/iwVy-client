@@ -32,8 +32,9 @@
 	backdrop-filter: blur(3rem);
 	padding: 0.5rem;
 	transition: all 0.2s ease;
+	z-index: 10;
+	background-color: #6b6b6b7c;
 	& > li + li {
 		margin-top: 0.2rem;
 	}
-	background: $secondColorDark;
 }

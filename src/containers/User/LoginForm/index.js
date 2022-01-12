@@ -64,7 +64,7 @@ export default function LoginForm() {
 				case 'User not found': {
 					toast.error('Gmail not found!', {
 						position: 'bottom-right',
-						autoClose: 5000,
+						autoClose: 3000,
 						hideProgressBar: false,
 						closeOnClick: true,
 						pauseOnHover: true,
@@ -81,7 +81,7 @@ export default function LoginForm() {
 						navigate('/')
 						toast.success('Login succesful!', {
 							position: 'bottom-right',
-							autoClose: 5000,
+							autoClose: 3000,
 							hideProgressBar: false,
 							closeOnClick: true,
 							pauseOnHover: true,
@@ -93,7 +93,7 @@ export default function LoginForm() {
 						setIsLoading(false)
 						toast.error('Something wrong!', {
 							position: 'bottom-right',
-							autoClose: 5000,
+							autoClose: 3000,
 							hideProgressBar: false,
 							closeOnClick: true,
 							pauseOnHover: true,

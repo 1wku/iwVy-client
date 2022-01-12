@@ -1,5 +1,12 @@
 import { useEffect, useState, useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+	ref,
+	uploadBytesResumable,
+	getDownloadURL,
+} from '@firebase/storage'
+import { toast } from 'react-toastify'
+import clsx from 'clsx'
 
 import { DropItem, IconWrapper, ImageText } from 'components/UI'
 import Appbar from './Appbar'
@@ -7,13 +14,19 @@ import styles from './index.module.scss'
 import { ReactComponent as Plus } from 'assets/icons/plus.svg'
 import { ReactComponent as Image } from 'assets/icons/image.svg'
 import { ReactComponent as Send } from 'assets/icons/send.svg'
+import { ReactComponent as LoadingInfi } from 'assets/icons/loading.svg'
+import { storage } from 'data/firebase'
+import { addPost, getTimeLine } from 'data/slices/postSlice'
 
 export default function AddPost() {
-	const [open, setOpen] = useState(false)
+	const dispatch = useDispatch()
+
+	const [open, setOpen] = useState(true)
 	const [value, setValue] = useState('')
 	const [image, setImage] = useState()
+	const [uploadProgress, setUploadProgress] = useState(0)
 
-	const { username, avatar } = useSelector(
+	const { username, avatar, _id } = useSelector(
 		state => state.user.myInfo,
 	)
 
@@ -30,10 +43,97 @@ export default function AddPost() {
 		setImage(file)
 	}
 
-	const handleAddPost = () => {}
+	const handleUploadImage = async file => {
+		const storageRef = ref(
+			storage,
+			`/iwVy/${username}${file?.name}`,
+		)
+		const uploadTask = uploadBytesResumable(storageRef, file)
+		toast.promise(
+			uploadTask,
+			{
+				pending: `Uploading image`,
+				error: 'Uploading image failed. Please check your network and try again!',
+				success: 'Uploading image successful!',
+			},
+			{
+				position: 'bottom-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: 'dark',
+			},
+		)
+
+		uploadTask.on(
+			'state_changed',
+			snapshot => {
+				const prog = Math.round(
+					(snapshot.bytesTransferred /
+						snapshot.totalBytes) *
+						100,
+				)
+				setUploadProgress(prog)
+			},
+			err => {
+				console.log(err)
+			},
+		)
+		return uploadTask.then(value => {
+			return getDownloadURL(value.metadata.ref)
+		})
+	}
+
+	const handleAddPost = () => {
+		if (!value) {
+			toast.error('Post have not been empty', {
+				position: 'bottom-right',
+				autoClose: 3000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+				theme: 'dark',
+			})
+		} else {
+			if (image)
+				handleUploadImage(image).then(url => {
+					setImage({ ...image, onlineUrl: url })
+					dispatch(
+						addPost({
+							userId: _id,
+							content: value,
+							img: url,
+						}),
+					).then(() => {
+						dispatch(getTimeLine({ userId: _id }))
+						setImage(null)
+						setValue('')
+					})
+				})
+			else {
+				dispatch(
+					addPost({
+						userId: _id,
+						content: value,
+						img: 'none image',
+					}),
+				).then(() => {
+					setImage(null)
+					setValue('')
+					setImage(null)
+					setValue('')
+				})
+			}
+		}
+	}
 
 	useEffect(() => {
-		inputRef.current && inputRef.current.focus()
+		// inputRef.current && inputRef.current.focus()
 		return () => {
 			image && URL.revokeObjectURL(image.preview)
 		}
@@ -76,12 +176,25 @@ export default function AddPost() {
 			)}
 			{open && (
 				<div className={styles.buttonGroup}>
+					{uploadProgress !== 0 && (
+						<span
+							className={clsx(styles.icon, {
+								[styles.o0]: uploadProgress === 100,
+							})}
+						>
+							<DropItem
+								icon={<LoadingInfi />}
+								text={`${uploadProgress}%`}
+								handleClick={() => {}}
+								pointer
+							/>
+						</span>
+					)}
 					<span className={styles.icon}>
 						<label htmlFor="imageInput">
 							<DropItem
 								icon={<Image />}
 								text="Image"
-								handleClick={handleAddPost}
 								pointer
 							/>
 						</label>
@@ -89,7 +202,7 @@ export default function AddPost() {
 					<span className={styles.icon}>
 						<DropItem
 							icon={<Send />}
-							text="Pulish"
+							text={'Pulish'}
 							handleClick={handleAddPost}
 							pointer
 						/>
@@ -102,6 +215,7 @@ export default function AddPost() {
 				id="imageInput"
 				className={styles.dn}
 				onChange={handlePreviewImage}
+				accept=".png,.gif,.jpeg,.jpg"
 			/>
 		</div>
 	)

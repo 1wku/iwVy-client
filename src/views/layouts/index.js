@@ -4,11 +4,12 @@ import Header from './Header'
 import Footer from './Footer'
 import githubLogo from 'assets/images/githubLogo.png'
 import { ReactComponent as PersonIcon } from 'assets/icons/person.svg'
+import styles from './index.module.scss'
+import Sidebar from './Sidebar'
+import Toolbar from './Toolbar'
 
-export default function Layout({ children, type }) {
+export default function Layout({ children, type, side }) {
 	const userInfo = useSelector(state => state.user.myInfo)
-
-	console.log()
 
 	const navigators = [
 		{
@@ -21,7 +22,7 @@ export default function Layout({ children, type }) {
 		},
 		{
 			//! thêm path sau khi có id
-			path: `/${userInfo._id}`,
+			path: `/user/${userInfo._id}`,
 			text: userInfo.username || '',
 			icon:
 				userInfo.avatar !== '' ? (
@@ -52,7 +53,15 @@ export default function Layout({ children, type }) {
 					type === 'large' ? navigators : infomations
 				}
 			/>
-			{children}
+			{type === 'large' ? (
+				<div className={styles.container}>
+					{side && <Sidebar />}
+					{children}
+					{side && <Toolbar />}
+				</div>
+			) : (
+				children
+			)}
 			{/* {type === 'large' && <Footer />} */}
 		</>
 	)

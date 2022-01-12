@@ -4,7 +4,7 @@
 	width: 100%;
 	max-width: 31.25rem;
 	padding: 1rem 0.875rem;
-	margin: 1.75rem 0;
+	margin-bottom: 1.75rem;
 	background-color: $secondColorDark;
 	z-index: 1;
 	border-radius: 0.675rem;
@@ -67,5 +67,15 @@
 	width: fill;
 	.icon {
 		min-width: 7.5rem;
+		margin-left: 1rem;
 	}
+}
+
+.icon {
+	opacity: 1;
+	transition: all 0.2s ease;
+}
+
+.o0 {
+	opacity: 0;
 }

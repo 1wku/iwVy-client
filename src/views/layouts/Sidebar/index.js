@@ -4,8 +4,7 @@ import { Group, GroupItem, Divider } from 'components/UI'
 import styles from './index.module.scss'
 
 export default function Sidebar() {
-
-	const {followings, followers} = useSelector(state => state.user)
+	const { followings, followers } = useSelector(state => state.user)
 
 	return (
 		<div className={styles.container}>
@@ -15,6 +14,7 @@ export default function Sidebar() {
 						key={item._id}
 						icon={item.avatar}
 						text={item.username}
+						id={item._id}
 						pointer
 					/>
 				))}
@@ -27,20 +27,11 @@ export default function Sidebar() {
 						icon={item.avatar}
 						text={item.username}
 						pointer
+						id={item._id}
 					/>
 				))}
 			</Group>
 			<Divider />
-			{/* <Group label="Online" fullWidth start>
-				{followers.map(item => (
-					<GroupItem
-						key={item.userId}
-						icon={item.avatar}
-						text={item.username}
-						pointer
-					/>
-				))}
-			</Group> */}
 		</div>
 	)
 }

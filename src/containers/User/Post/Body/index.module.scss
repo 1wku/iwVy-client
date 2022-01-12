@@ -6,10 +6,16 @@
 .content {
 	font-weight: normal;
 	font-size: 0.875rem;
+	white-space: pre-line;
+	margin-bottom: 0;
 }
 
-.img { 
-    border-radius: 0.3125rem;
-    max-height:31.25rem;
-    max-width: 100%;
+.img {
+	border-radius: 0.3125rem;
+	height: 25rem;
+	max-width: 100%;
+	width: fit-content;
+	object-fit: cover;
+	margin-top: 0.875rem;
+	align-self: center;
 }

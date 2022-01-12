@@ -7,12 +7,14 @@ body {
 	min-height: 100%;
 	background: $mainColorDark;
 	color: #ffffff;
+	overflow-y: hidden;
 }
 
 html {
 	min-height: 100%;
 	position: relative;
 }
+
 /* -------------------------------------------------------------------------- */
 /*                                  reset css                                 */
 /* -------------------------------------------------------------------------- */
@@ -34,3 +36,31 @@ ul {
 	list-style: none;
 }
 
+li {
+	list-style: none;
+}
+
+body {
+	background: linear-gradient(135deg, #080a08, #0e030e, #010405, rgb(5, 1, 1), rgb(7, 2, 31));
+	background-size: 400% 400%;
+	animation: gradient 25s ease infinite;
+	height: 100vh;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	25% {
+		background-position: 50% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	75% {
+		background-position: 50% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}

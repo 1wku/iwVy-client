@@ -1,67 +1,196 @@
 import * as timeago from 'timeago.js'
-import { toast } from 'react-toastify'
+import { useSelector } from 'react-redux'
 
 import styles from './index.module.scss'
-import { ImageText } from 'components/UI'
 import Topbar from './Topbar'
 import Body from './Body'
 import Bottombar from './Bottombar'
 import { ReactComponent as Option } from 'assets/icons/threedot.svg'
 import { ReactComponent as Like } from 'assets/icons/like.svg'
 import { ReactComponent as Comment } from 'assets/icons/comment.svg'
-import { ReactComponent as Share } from 'assets/icons/share.svg'
 import { Dropdown, DropItem } from 'components/UI'
 import { ReactComponent as Saveicon } from 'assets/icons/save.svg'
 import { ReactComponent as WarningIcon } from 'assets/icons/warning.svg'
 import { ReactComponent as Download } from 'assets/icons/download.svg'
 import { ReactComponent as Url } from 'assets/icons/url.svg'
 import { useDispatch } from 'react-redux'
-import { getTimeLine, likePost } from 'data/slices/postSlice'
+import { likePost } from 'data/slices/postSlice'
+import { useEffect, useState } from 'react'
+import { List } from 'components/UI'
+import { ImageText } from 'components/UI'
+import { followUser, savePost, getMe } from 'data/slices/userSlice'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
-export default function Post({ post }) {
+export default function Post({ post, index }) {
 	const dispatch = useDispatch()
-
+	const { cacheUsers } = useSelector(state => state.user)
 	const userId = localStorage.getItem('userId')
+	const navigate = useNavigate()	
 
-	const menuItems = [
-		{
-			icon: <Saveicon />,
-			text: 'Save this post',
-			handleClick: () => {},
-		},
-		{
-			icon: <WarningIcon />,
-			text: 'Unfollow this user',
-			handleClick: () => {},
-		},
-		{
-			icon: <Url />,
-			text: "Copy post's URL",
-			handleClick: () => {},
-		},
-		{
-			icon: <Download />,
-			text: 'Download this image',
-			handleClick: () => {},
-		},
-	]
+	const [zoom, setZoom] = useState(false)
+	const [likes, setLikes] = useState([])
+
+	const menuItems =
+		userId === post.userId
+			? [
+					{
+						icon: <Saveicon />,
+						text: 'Save this post',
+						handleClick: async () => {
+							const res = await dispatch(
+								savePost({
+									userId,
+									postId: post._id,
+								}),
+							)
+							if (
+								res.payload.status ===
+								'saved post successfully'
+							)
+								toast.success(
+									'Post have been saved!',
+									{
+										position: 'bottom-right',
+										autoClose: 3000,
+										hideProgressBar: false,
+										closeOnClick: true,
+										pauseOnHover: true,
+										draggable: true,
+										progress: undefined,
+										theme: 'dark',
+									},
+								)
+							else if (
+								res.payload.status ===
+								'unsaved post successfully'
+							)
+								toast.success(
+									'Post have been unsaved!',
+									{
+										position: 'bottom-right',
+										autoClose: 3000,
+										hideProgressBar: false,
+										closeOnClick: true,
+										pauseOnHover: true,
+										draggable: true,
+										progress: undefined,
+										theme: 'dark',
+									},
+								)
+						},
+					},
+					{
+						icon: <Url />,
+						text: "Copy post's URL",
+						handleClick: () => {},
+					},
+					{
+						icon: <Download />,
+						text: 'Download this image',
+						handleClick: () => {},
+					},
+			  ]
+			: [
+					{
+						icon: <Saveicon />,
+						text: 'Save this post',
+						handleClick: async () => {
+							const res = await dispatch(
+								savePost({
+									userId,
+									postId: post._id,
+								}),
+							)
+							if (
+								res.payload.status ===
+								'saved post successfully'
+							)
+								toast.success(
+									'Post have been saved!',
+									{
+										position: 'bottom-right',
+										autoClose: 3000,
+										hideProgressBar: false,
+										closeOnClick: true,
+										pauseOnHover: true,
+										draggable: true,
+										progress: undefined,
+										theme: 'dark',
+									},
+								)
+							else if (
+								res.payload.status ===
+								'unsaved post successfully'
+							)
+								toast.success(
+									'Post have been unsaved!',
+									{
+										position: 'bottom-right',
+										autoClose: 3000,
+										hideProgressBar: false,
+										closeOnClick: true,
+										pauseOnHover: true,
+										draggable: true,
+										progress: undefined,
+										theme: 'dark',
+									},
+								)
+						},
+					},
+					{
+						icon: <WarningIcon />,
+						text: 'Unfollow this user',
+						handleClick: async () => {
+							const res = await dispatch(
+								followUser({
+									userId,
+									followId: post.userId,
+								}),
+							)
+							dispatch(getMe({ userId }))
+							navigate('/')
+						},
+					},
+					{
+						icon: <Url />,
+						text: "Copy post's URL",
+						handleClick: () => {},
+					},
+					{
+						icon: <Download />,
+						text: 'Download this image',
+						handleClick: () => {},
+					},
+			  ]
 
 	const handleLikePost = () => {
-		dispatch(likePost({ userId, postId: post._id })).then(res => {
-			console.log('like', res)
-			if (res.type === 'post/like&dislike/fulfilled') {
-				dispatch(getTimeLine({ userId }))
-			}
-		})
+		dispatch(likePost({ userId, postId: post._id }))
 	}
 
+	useEffect(() => {
+		const handleGetLikedUserInfo = async () => {
+			let likedUsers = post.likes.map(id => {
+				let user = cacheUsers.filter(
+					user => user._id === id,
+				)[0]
+				return user
+			})
+			setLikes(likedUsers)
+		}
+		handleGetLikedUserInfo()
+	}, [post.likes, cacheUsers])
+
 	return (
-		<div className={styles.container}>
+		<div
+			className={styles.container}
+			style={{ zIndex: 99 - index }}
+		>
 			<Topbar>
 				<ImageText
 					size="medium"
 					type="avatar"
-					image={post.avatar}
+					image={post?.avatar || ''}
 					text={post.username}
 					date={timeago.format(post.createdAt)}
 				/>
@@ -76,23 +205,29 @@ export default function Post({ post }) {
 					))}
 				</Dropdown>
 			</Topbar>
-			<Body content={post.content} img={post.img} />
+			<Body
+				content={post.content}
+				img={post.img}
+				zoom={zoom}
+				setZoom={setZoom}
+			/>
 			<Bottombar>
 				<DropItem
 					icon={<Like />}
-					text={post.likes.length}
+					text={post.likes.length || '0'}
 					autoWidth
 					liked={post.likes.includes(userId)}
 					handleClick={handleLikePost}
-				/>
+					hoverToMore
+				>
+					<List list={likes} />
+				</DropItem>
 				<DropItem
 					icon={<Comment />}
-					text={0}
+					text={'-'}
 					autoWidth
-					liked={post.likes.includes(userId)}
 					handleClick={() => {}}
 				/>
-				{/* <Share /> */}
 			</Bottombar>
 		</div>
 	)

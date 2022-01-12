@@ -3,6 +3,7 @@
 .container {
 	display: flex;
 	flex-direction: column;
+	position: relative;
 }
 
 .title {
@@ -30,7 +31,7 @@
 	&:focus {
 		border-color: $borderColor;
 	}
-	&:invalid[focused="true"] {
+	&:invalid[focused='true'] {
 		border-color: #fc8477;
 		& ~ .errorMessage {
 			opacity: 1;
@@ -47,4 +48,14 @@
 	opacity: 0;
 	height: 0;
 	transition: all 0.2s ease;
+}
+
+.fullWidth {
+	width: fill;
+}
+
+.icon {
+	position: absolute;
+	right: 1.5rem;
+	top: 3rem;
 }

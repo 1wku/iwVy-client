@@ -4,23 +4,34 @@ const xTransition = {
 	in: {
 		opacity: 1,
 		x: 0,
-		paddingBottom: "1rem",
+		paddingBottom: '1rem',
+		zIndex: 99,
 	},
 	out: {
 		opacity: 0,
 		x: '-100%',
-		paddingBottom: "1rem",
+		zIndex: 99,
+		paddingBottom: '1rem',
 	},
 }
 
 const fade = {
 	in: {
 		opacity: 1,
-		zIndex: -1,
 	},
 	out: {
 		opacity: 0,
-		zIndex: -1,
+	},
+}
+
+const backdropFade = {
+	in: {
+		opacity: 1,
+		zIndex: 99,
+	},
+	out: {
+		opacity: 0,
+		zIndex: 99,
 	},
 }
 
@@ -36,6 +47,7 @@ export function XTransition({ children }) {
 		</motion.div>
 	)
 }
+
 export function Fade({ children }) {
 	return (
 		<motion.div
@@ -43,6 +55,19 @@ export function Fade({ children }) {
 			animate="in"
 			exit="out"
 			variants={fade}
+		>
+			{children}
+		</motion.div>
+	)
+}
+
+export function BackdropFade({ children }) {
+	return (
+		<motion.div
+			initial="out"
+			animate="in"
+			exit="out"
+			variants={backdropFade}
 		>
 			{children}
 		</motion.div>
