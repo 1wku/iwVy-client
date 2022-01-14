@@ -2,9 +2,9 @@ import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import styles from './index.module.scss'
-import socket, { SocketContext } from 'service/SocketContext'
+import { SocketContext } from 'service/SocketContext'
 
-const Meeting = () => {
+const MeettingAnswer = () => {
 	const {
 		myVideo,
 		callAccepted,
@@ -12,15 +12,11 @@ const Meeting = () => {
 		callEnded,
 		stream,
 		call,
-		me,
 		setStream,
 		leaveCall,
 		callUser,
 		answerCall,
 	} = useContext(SocketContext)
-
-	const params = useParams()
-
 	useEffect(() => {
 		navigator.mediaDevices
 			.getUserMedia({ video: true, audio: true })
@@ -28,11 +24,11 @@ const Meeting = () => {
 				setStream(currentStream)
 				myVideo.current.srcObject = currentStream
 			})
-			.then(() => {
-				callUser(params.id)
-			})
 	}, [])
-	console.log(userVideo)
+
+	useEffect(() => {
+		answerCall()
+	})
 
 	return (
 		<div className={styles.container}>
@@ -42,11 +38,11 @@ const Meeting = () => {
 			{callAccepted && !callEnded && (
 				<video ref={userVideo} playsInline autoPlay />
 			)}
-			{/* {callAccepted && !callEnded && (
+			{callAccepted && !callEnded && (
 				<button onClick={() => leaveCall()}>Hang up </button>
-			)} */}
+			)}
 		</div>
 	)
 }
 
-export default Meeting
+export default MeettingAnswer

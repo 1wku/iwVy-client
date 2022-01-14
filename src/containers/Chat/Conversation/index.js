@@ -1,7 +1,11 @@
 import WrapAvatar from 'components/UI/AvatarWrap'
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
+import styles from './index.module.scss'
+import { IconWrapper } from 'components/UI'
+import { ReactComponent as Phone } from 'assets/icons/phone.svg'
 import { setConversation, setLoading } from 'data/slices/chatSlice'
 
 export default function Conversation({
@@ -9,6 +13,7 @@ export default function Conversation({
 	mini,
 	setLabelImg,
 }) {
+	const navigative = useNavigate()
 	const dispatch = useDispatch()
 	const { followings, myInfo } = useSelector(state => state.user)
 	const { currentConversation } = useSelector(state => state.chat)
@@ -34,14 +39,27 @@ export default function Conversation({
 		}
 	}, [followings, conversation, myInfo])
 
+	const handleCall = () => {
+		navigative(`meetting/${user.id}`)
+	}
+
 	return (
 		<>
 			{mini ? (
-				<div onClick={handleClick}>
+				<div
+					onClick={handleClick}
+					className={styles.container_mini}
+				>
 					<WrapAvatar
 						url={user?.avatar}
 						handleClick={user?.handleClick}
 					/>
+					<span
+						className={styles.phone_mini}
+						onClick={handleCall}
+					>
+						<IconWrapper icon={<Phone />} />
+					</span>
 				</div>
 			) : (
 				<div></div>

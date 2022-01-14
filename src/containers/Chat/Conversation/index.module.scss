@@ -1,0 +1,20 @@
+.container_mini {
+	display: flex;
+	align-items: center;
+	overflow-x: hidden;
+    justify-content: space-between;
+	width: 2.875rem;
+	transition: all 0.2s ease;
+	&:hover {
+		width: 5.625rem;
+		& > .phone_mini {
+			opacity: 1;
+		}
+	}
+}
+
+.phone_mini {
+	opacity: 0;
+	transition: all 0.2s ease;
+    
+}

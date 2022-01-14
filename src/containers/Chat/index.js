@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { io } from 'socket.io-client'
 
 import { HorSlider } from 'components/UI'
 import ChatItem from './ChatItem'
@@ -16,11 +15,12 @@ import {
 } from 'data/slices/chatSlice'
 import { getOnlineUsers } from 'data/slices/userSlice'
 import defaultAvatar from 'assets/images/defaultAvatar.jpg'
+import socket from 'service/SocketContext'
 
 export default function Chat() {
 	const dispatch = useDispatch()
 	const scrollRef = useRef()
-	const socket = useRef()
+
 	const userId = localStorage.getItem('userId')
 	const { conversations, messages, loading, currentConversation } =
 		useSelector(state => state.chat)
@@ -34,11 +34,14 @@ export default function Chat() {
 			dispatch(setLoading(true))
 			dispatch(getConversations(userId))
 		}
+		socket.on('getUsers', users => {
+			dispatch(getOnlineUsers(users))
+			console.log(users)
+		})
 	}, [userId])
 
 	useEffect(() => {
-		socket.current = io('ws://localhost:3007')
-		socket.current.on('getMessage', ({ senderId, message }) => {
+		socket.on('getMessage', ({ senderId, message }) => {
 			const createdAt = new Date()
 			dispatch(
 				updateMessage({
@@ -49,19 +52,10 @@ export default function Chat() {
 				}),
 			)
 		})
-	}, [currentConversation])
-
-	useEffect(() => {
-		socket.current.emit('addUser', userId)
-		socket.current.on('getUsers', users => {
-			dispatch(getOnlineUsers(users))
-			console.log(users)
-		})
 		return () => {
-			socket.current.emit('disconnect')
-			socket.current.disconnect()
+			socket.removeListener('getMessage')
 		}
-	}, [userId])
+	}, [currentConversation])
 
 	useEffect(() => {
 		scrollRef?.current.scrollIntoView({ behavior: 'smooth' })
@@ -73,7 +67,7 @@ export default function Chat() {
 		})
 
 		//socket.io
-		socket.current.emit('sendMessage', {
+		socket.emit('sendMessage', {
 			senderId: me.myInfo._id,
 			receiverId,
 			message: message,
