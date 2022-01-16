@@ -13,7 +13,6 @@ export default function Backdrop({ children }) {
 
 	const { imageZooming, isZoom } = useSelector(state => state.post)
 	const handleAnswer = () => {
-		
 		navigative('/anwser/meetting')
 	}
 

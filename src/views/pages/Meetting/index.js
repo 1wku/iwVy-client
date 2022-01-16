@@ -29,6 +29,7 @@ const Meeting = () => {
 				myVideo.current.srcObject = currentStream
 			})
 			.then(() => {
+
 				callUser(params.id)
 			})
 	}, [])
@@ -42,9 +43,9 @@ const Meeting = () => {
 			{callAccepted && !callEnded && (
 				<video ref={userVideo} playsInline autoPlay />
 			)}
-			{/* {callAccepted && !callEnded && (
+			{callAccepted && !callEnded && (
 				<button onClick={() => leaveCall()}>Hang up </button>
-			)} */}
+			)}
 		</div>
 	)
 }

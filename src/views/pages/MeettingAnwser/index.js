@@ -24,19 +24,16 @@ const MeettingAnswer = () => {
 				setStream(currentStream)
 				myVideo.current.srcObject = currentStream
 			})
+			.then(answerCall)
 	}, [])
-
-	useEffect(() => {
-		answerCall()
-	})
-
+	console.log(userVideo)
 	return (
 		<div className={styles.container}>
 			{stream && (
-				<video ref={myVideo} playsInline muted autoPlay />
+				<video playsInline muted ref={myVideo} autoPlay />
 			)}
 			{callAccepted && !callEnded && (
-				<video ref={userVideo} playsInline autoPlay />
+				<video playsInline ref={userVideo} autoPlay />
 			)}
 			{callAccepted && !callEnded && (
 				<button onClick={() => leaveCall()}>Hang up </button>
