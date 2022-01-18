@@ -7,6 +7,7 @@ import {
 } from 'react'
 import { io } from 'socket.io-client'
 import Peer from 'simple-peer'
+import { useSelector } from 'react-redux'
 
 const SocketContext = createContext()
 
@@ -14,6 +15,7 @@ const socket = io('ws://localhost:3007')
 
 const ContextProvider = ({ children }) => {
 	const userId = localStorage.getItem('userId')
+		
 
 	const [callAccepted, setCallAccepted] = useState(false)
 	const [callEnded, setCallEnded] = useState(false)
@@ -43,14 +45,17 @@ const ContextProvider = ({ children }) => {
 				signal: data.signal,
 			})
 		})
+		socket.on('leaveCall', data => {
+			setCallEnded(true)
+		})
 	}, [])
 
 	const callUser = useCallback(
-		id => {
+		(id, currentStream) => {
 			const peer = new Peer({
 				initiator: true,
 				trickle: false,
-				stream: stream,
+				stream: currentStream,
 			})
 			peer.on('signal', data => {
 				console.log(users)
@@ -67,35 +72,41 @@ const ContextProvider = ({ children }) => {
 				userVideo.current.srcObject = stream
 			})
 			socket.on('callAccepted', data => {
+				peer.signal(data.signal)
 				setCallAccepted(true)
-				peer.signal(data)
 			})
 			connectionRef.current = peer
 		},
-		[me, stream, users],
+		[me, users],
 	)
 
-	const answerCall = useCallback(() => {
-		setCallAccepted(true)
-		const peer = new Peer({
-			initiator: false,
-			trickle: false,
-			stream: stream,
-		})
-		peer.on('signal', data => {
-			socket.emit('answerCall', {
-				signal: data,
-				to: call.from,
+	const answerCall = useCallback(
+		currentStream => {
+			setCallAccepted(true)
+			const peer = new Peer({
+				initiator: false,
+				trickle: false,
+				stream: currentStream,
 			})
-		})
-		peer.on('stream', stream => {
-			userVideo.current.srcObject = stream
-		})
-		peer.signal(call.signal)
-		connectionRef.current = peer
-	}, [call.from, call.signal, stream])
+			peer.on('signal', data => {
+				socket.emit('answerCall', {
+					signal: data,
+					to: call.from,
+				})
+			})
+			peer.on('stream', stream => {
+				userVideo.current.srcObject = stream
+			})
+			peer.signal(call.signal)
+			connectionRef.current = peer
+		},
+		[call.from, call.signal],
+	)
 
-	const leaveCall = () => {
+	const leaveCall = id => {
+		const to = users.find(user => user.userId === id).socketId
+		to && socket.emit('leaveCall', { to })
+
 		setCallEnded(true)
 		connectionRef.current.destroy()
 		window.location.reload()
@@ -117,6 +128,7 @@ const ContextProvider = ({ children }) => {
 				answerCall,
 				callUser,
 				setStream,
+				setCallEnded,
 			}}
 		>
 			{children}

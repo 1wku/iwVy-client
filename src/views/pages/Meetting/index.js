@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import clsx from 'clsx'
 
 import styles from './index.module.scss'
 import socket, { SocketContext } from 'service/SocketContext'
+import Controller from './Controller'
 
 const Meeting = () => {
 	const {
@@ -11,15 +13,16 @@ const Meeting = () => {
 		userVideo,
 		callEnded,
 		stream,
-		call,
-		me,
 		setStream,
 		leaveCall,
 		callUser,
-		answerCall,
+		setCallEnded,
+		connectionRef,
 	} = useContext(SocketContext)
+	const navigative = useNavigate()
 
 	const params = useParams()
+	const [position, setPosition] = useState(1)
 
 	useEffect(() => {
 		navigator.mediaDevices
@@ -27,25 +30,46 @@ const Meeting = () => {
 			.then(currentStream => {
 				setStream(currentStream)
 				myVideo.current.srcObject = currentStream
-			})
-			.then(() => {
-
-				callUser(params.id)
+				callUser(params.id, currentStream)
 			})
 	}, [])
-	console.log(userVideo)
 
 	return (
-		<div className={styles.container}>
+		<div
+			className={clsx(
+				styles.container,
+				styles[`container_${position}`],
+			)}
+		>
+			{callAccepted && !callEnded && (
+				<video
+					ref={userVideo}
+					playsInline
+					autoPlay
+					className={clsx(
+						styles.userVideo,
+						styles[`userVideo_${position}`],
+					)}
+				/>
+			)}
 			{stream && (
-				<video ref={myVideo} playsInline muted autoPlay />
+				<video
+					ref={myVideo}
+					playsInline
+					muted
+					autoPlay
+					className={clsx(
+						styles.myVideo,
+						styles[`myVideo_${position}`],
+					)}
+				/>
 			)}
-			{callAccepted && !callEnded && (
-				<video ref={userVideo} playsInline autoPlay />
-			)}
-			{callAccepted && !callEnded && (
-				<button onClick={() => leaveCall()}>Hang up </button>
-			)}
+			<Controller
+				id={params.id}
+				setPosition={setPosition}
+				stream={stream}
+				leaveCall={leaveCall}
+			/>
 		</div>
 	)
 }

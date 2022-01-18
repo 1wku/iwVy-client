@@ -40,7 +40,7 @@ export default function Conversation({
 	}, [followings, conversation, myInfo])
 
 	const handleCall = () => {
-		navigative(`meetting/${user._id}`)
+		navigative(`/meetting/${user._id}`)
 	}
 
 	return (

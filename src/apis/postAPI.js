@@ -1,5 +1,4 @@
 import requestAPI from './axiosClient'
-import queryString from 'query-string'
 
 export const postAPI = {
 	getTimeLine({ userId, params }) {

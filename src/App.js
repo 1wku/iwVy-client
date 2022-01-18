@@ -35,12 +35,24 @@ export default function App() {
 								element={route.main}
 							/>
 						)
+					case '/anwser/meetting':
+						return (
+							<Route
+								key={index}
+								path={route.path}
+								element={route.main}
+							/>
+						)
 					case '/chat':
 						return (
 							<Route
 								key={index}
 								path={route.path}
-								element={<Layout type="large">{route.main}</Layout>}
+								element={
+									<Layout type="large">
+										{route.main}
+									</Layout>
+								}
 							/>
 						)
 
@@ -69,7 +81,7 @@ export default function App() {
 		}
 		return result
 	}
-	
+
 	useEffect(() => {
 		const userId = localStorage.getItem('userId')
 		if (!userId) {

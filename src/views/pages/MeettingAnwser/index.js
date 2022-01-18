@@ -1,8 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import styles from './index.module.scss'
-import { SocketContext } from 'service/SocketContext'
+import socket, { SocketContext } from 'service/SocketContext'
+import Controller from '../Meetting/Controller'
+import clsx from 'clsx'
+import { toast } from 'react-toastify'
 
 const MeettingAnswer = () => {
 	const {
@@ -11,33 +14,79 @@ const MeettingAnswer = () => {
 		userVideo,
 		callEnded,
 		stream,
-		call,
 		setStream,
 		leaveCall,
-		callUser,
 		answerCall,
+		setCallEnded,
+		connectionRef,
 	} = useContext(SocketContext)
+	const navigative = useNavigate()
+	const [position, setPosition] = useState(1)
 	useEffect(() => {
 		navigator.mediaDevices
 			.getUserMedia({ video: true, audio: true })
 			.then(currentStream => {
 				setStream(currentStream)
 				myVideo.current.srcObject = currentStream
+				answerCall(currentStream)
 			})
-			.then(answerCall)
 	}, [])
-	console.log(userVideo)
+
+	useEffect(() => {
+		if (callEnded) {
+			toast.warn('Call have been ended!', {
+				position: 'top-right',
+				autoClose: 2000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			})
+			const timerid = setTimeout(() => {
+				navigative('/')
+				window.location.reload()
+			},3000)
+			return () => clearTimeout(timerid)
+		}
+	}, [callEnded])
+
 	return (
-		<div className={styles.container}>
+		<div
+			className={clsx(
+				styles.container,
+				styles[`container_${position}`],
+			)}
+		>
+			{callAccepted && !callEnded && (
+				<video
+					ref={userVideo}
+					playsInline
+					autoPlay
+					className={clsx(
+						styles.userVideo,
+						styles[`userVideo_${position}`],
+					)}
+					draggable={true}
+				/>
+			)}
 			{stream && (
-				<video playsInline muted ref={myVideo} autoPlay />
+				<video
+					ref={myVideo}
+					playsInline
+					muted
+					autoPlay
+					className={clsx(
+						styles.myVideo,
+						styles[`myVideo_${position}`],
+					)}
+				/>
 			)}
-			{callAccepted && !callEnded && (
-				<video playsInline ref={userVideo} autoPlay />
-			)}
-			{callAccepted && !callEnded && (
-				<button onClick={() => leaveCall()}>Hang up </button>
-			)}
+			<Controller
+				setPosition={setPosition}
+				stream={stream}
+				leaveCall={leaveCall}
+			/>
 		</div>
 	)
 }

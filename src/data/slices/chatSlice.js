@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { chatAPI } from 'apis/chatAPI'
+import { tuturu } from 'service/Notification'
 
 const initialState = {
 	conversations: [],
@@ -73,6 +74,7 @@ const handleSendMessage = (state, action) => {
 
 export const handleUpdateMessage = (state, action) => {
 	state.messages.push(action.payload)
+	tuturu()
 }
 
 const chatSlide = createSlice({

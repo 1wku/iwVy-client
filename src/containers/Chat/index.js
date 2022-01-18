@@ -36,22 +36,22 @@ export default function Chat() {
 		}
 		socket.on('getUsers', users => {
 			dispatch(getOnlineUsers(users))
-			console.log(users)
 		})
 	}, [userId])
 
 	useEffect(() => {
-		socket.on('getMessage', ({ senderId, message }) => {
-			const createdAt = new Date()
-			dispatch(
-				updateMessage({
-					conversationId: currentConversation._id,
-					sendBy: senderId,
-					text: message,
-					createdAt,
-				}),
-			)
-		})
+		socket
+			.on('getMessage', ({ senderId, message }) => {
+				const createdAt = new Date()
+				dispatch(
+					updateMessage({
+						conversationId: currentConversation._id,
+						sendBy: senderId,
+						text: message,
+						createdAt,
+					}),
+				)
+			})
 		return () => {
 			socket.removeListener('getMessage')
 		}

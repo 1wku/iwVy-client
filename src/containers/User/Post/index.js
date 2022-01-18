@@ -26,7 +26,7 @@ export default function Post({ post, index }) {
 	const dispatch = useDispatch()
 	const { cacheUsers } = useSelector(state => state.user)
 	const userId = localStorage.getItem('userId')
-	const navigate = useNavigate()	
+	const navigate = useNavigate()
 
 	const [zoom, setZoom] = useState(false)
 	const [likes, setLikes] = useState([])
@@ -193,6 +193,7 @@ export default function Post({ post, index }) {
 					image={post?.avatar || ''}
 					text={post.username}
 					date={timeago.format(post.createdAt)}
+					path={`/user/${post.userId}`}
 				/>
 				<Dropdown icon={<Option />}>
 					{menuItems.map(item => (

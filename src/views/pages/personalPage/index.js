@@ -23,7 +23,7 @@ export default function PersonalPage() {
 			dispatch(getProfile({ id: params.id }))
 		}
 		mounted && getInfo()
-	}, [])
+	}, [params.id])
 
 	return (
 		<div className={styles.container}>
