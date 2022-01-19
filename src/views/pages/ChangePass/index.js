@@ -57,7 +57,7 @@ export default function ChangePass() {
 	const handleSubmit = () => {
 		if (values.old === values.new) {
 			toast.error('New password is already in use', {
-				position: 'bottom-right',
+				position: 'bottom-left',
 				autoClose: 5000,
 				hideProgressBar: false,
 				closeOnClick: true,
@@ -72,7 +72,7 @@ export default function ChangePass() {
 			).then(res => {
 				if (res.payload.response?.data === 'Wrong password') {
 					toast.error('Old password is incorrect!', {
-						position: 'bottom-right',
+						position: 'bottom-left',
 						autoClose: 5000,
 						hideProgressBar: false,
 						closeOnClick: true,
@@ -93,7 +93,7 @@ export default function ChangePass() {
 								toast.success(
 									'Password is updated successfully',
 									{
-										position: 'bottom-right',
+										position: 'bottom-left',
 										autoClose: 5000,
 										hideProgressBar: false,
 										closeOnClick: true,

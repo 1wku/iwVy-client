@@ -10,7 +10,7 @@ export default function Backdrop({ children }) {
 	const dispatch = useDispatch()
 	const { call, answerCall, callAccepted } =
 		useContext(SocketContext)
-
+	const { backdrop, popup } = useSelector(state => state.backdrop)
 	const { imageZooming, isZoom } = useSelector(state => state.post)
 	const handleAnswer = () => {
 		navigative('/anwser/meetting')
@@ -38,6 +38,18 @@ export default function Backdrop({ children }) {
 				<div className={styles.backdrop}>
 					<h1>Have a call</h1>
 					<button onClick={handleAnswer}>Answer</button>
+				</div>
+			)}
+			{backdrop && popup && (
+				<div
+					className={styles.backdrop}
+					onClick={() =>
+						dispatch(
+							zoomImage({ url: '', isZoom: false }),
+						)
+					}
+				>
+					{backdrop}
 				</div>
 			)}
 		</>

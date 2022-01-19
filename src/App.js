@@ -13,6 +13,7 @@ import { getTimeLine, setLoading } from 'data/slices/postSlice'
 export default function App() {
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
+	const userId = localStorage.getItem('userId')
 
 	const isHasLayout = [
 		'/',
@@ -96,7 +97,7 @@ export default function App() {
 			)
 			dispatch(getMe({ userId }))
 		}
-	}, [])
+	}, [userId])
 	return (
 		<div>
 			<AnimatePresence>

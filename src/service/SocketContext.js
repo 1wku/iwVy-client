@@ -15,7 +15,6 @@ const socket = io('ws://localhost:3007')
 
 const ContextProvider = ({ children }) => {
 	const userId = localStorage.getItem('userId')
-		
 
 	const [callAccepted, setCallAccepted] = useState(false)
 	const [callEnded, setCallEnded] = useState(false)
@@ -59,11 +58,8 @@ const ContextProvider = ({ children }) => {
 			})
 			peer.on('signal', data => {
 				console.log(users)
-				const socketId = users.find(
-					user => user.userId === id,
-				).socketId
 				socket.emit('callUser', {
-					to: socketId,
+					to: id,
 					signalData: data,
 					from: me,
 				})
@@ -123,6 +119,7 @@ const ContextProvider = ({ children }) => {
 				name,
 				callEnded,
 				me,
+				users,
 				setName,
 				leaveCall,
 				answerCall,

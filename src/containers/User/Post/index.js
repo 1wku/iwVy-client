@@ -51,7 +51,7 @@ export default function Post({ post, index }) {
 								toast.success(
 									'Post have been saved!',
 									{
-										position: 'bottom-right',
+										position: 'bottom-left',
 										autoClose: 3000,
 										hideProgressBar: false,
 										closeOnClick: true,
@@ -68,7 +68,7 @@ export default function Post({ post, index }) {
 								toast.success(
 									'Post have been unsaved!',
 									{
-										position: 'bottom-right',
+										position: 'bottom-left',
 										autoClose: 3000,
 										hideProgressBar: false,
 										closeOnClick: true,
@@ -109,7 +109,7 @@ export default function Post({ post, index }) {
 								toast.success(
 									'Post have been saved!',
 									{
-										position: 'bottom-right',
+										position: 'bottom-left',
 										autoClose: 3000,
 										hideProgressBar: false,
 										closeOnClick: true,
@@ -126,7 +126,7 @@ export default function Post({ post, index }) {
 								toast.success(
 									'Post have been unsaved!',
 									{
-										position: 'bottom-right',
+										position: 'bottom-left',
 										autoClose: 3000,
 										hideProgressBar: false,
 										closeOnClick: true,

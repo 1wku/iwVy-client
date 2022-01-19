@@ -5,26 +5,34 @@
 	box-shadow: -0.625rem 0.625rem 0.625rem rgba(0, 0, 0, 0.25);
 	border-radius: 0.625rem;
 	width: fit-content;
-	max-width: 7.5rem;
 	font-size: 0.875rem;
 	position: relative;
+	max-width: 70%;
+	&:hover > .createdAt {
+		opacity: 0.7;
+	}
+}
+
+.mini {
+	max-width: 7.5rem;
 }
 
 .createdAt {
 	position: absolute;
 	font-size: 0.5rem;
-	opacity: 0.7;
+	opacity: 0;
 	font-weight: 300;
 	bottom: 0.2rem;
 	right: 0;
-	width: fit-content;
-	transform: translateX(110%);	
+	width: 3.125rem;
+	transform: translateX(110%);
+	transition: all 0.2s ease;
 }
 
 .mine {
 	align-self: flex-end;
 	& > .createdAt {
 		left: 0;
-		transform: translateX(-110%);	
+		transform: translateX(-110%);
 	}
 }

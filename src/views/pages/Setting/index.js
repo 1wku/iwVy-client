@@ -34,7 +34,7 @@ export default function Setting() {
 		await userAPI.updateAccount(values).then(res => {
 			if (res.status === 200) {
 				toast.success('Update succesful!', {
-					position: 'bottom-right',
+					position: 'bottom-left',
 					autoClose: 3000,
 					hideProgressBar: false,
 					closeOnClick: true,
@@ -46,7 +46,7 @@ export default function Setting() {
 				navigate('/')
 			} else {
 				toast.error('Update error!', {
-					position: 'bottom-right',
+					position: 'bottom-left',
 					autoClose: 3000,
 					hideProgressBar: false,
 					closeOnClick: true,

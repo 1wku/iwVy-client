@@ -84,7 +84,7 @@ export default function RegisterForm() {
 					toast.error(
 						'Your username or email already exists',
 						{
-							position: 'bottom-right',
+							position: 'bottom-left',
 							autoClose: 5000,
 							hideProgressBar: false,
 							closeOnClick: true,
@@ -99,7 +99,7 @@ export default function RegisterForm() {
 					setIsLoading({ ...isLoading, register: false })
 					navigate('/login')
 					toast.success('Sign up succesful!', {
-						position: 'bottom-right',
+						position: 'bottom-left',
 						autoClose: 5000,
 						hideProgressBar: false,
 						closeOnClick: true,

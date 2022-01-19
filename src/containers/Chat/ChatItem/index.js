@@ -3,30 +3,21 @@ import styles from './index.module.scss'
 import React, { useState, useEffect, forwardRef } from 'react'
 import { format } from 'timeago.js'
 
-function MessItem({ text, mine, createdAt }, ref) {
-	const [showTime, setShowTime] = useState(false)
-
-	useEffect(() => {
-		const timerId = setTimeout(() => {
-			setShowTime(false)
-		}, 3000)
-		return () => clearTimeout(timerId)
-	}, [showTime])
-
+function MessItem({ text, mine, createdAt, mini }, ref) {
+	
 	return (
 		<span
 			className={clsx(styles.chatItem, {
 				[styles.mine]: mine,
+				[styles.mini]: mini
 			})}
-			onClick={() => setShowTime(!showTime)}
 			ref={ref}
 		>
 			{text}
-			{showTime && (
-				<span className={clsx(styles.createdAt)}>
-					{format(createdAt)}
-				</span>
-			)}
+
+			<span className={clsx(styles.createdAt)}>
+				{format(createdAt)}
+			</span>
 		</span>
 	)
 }

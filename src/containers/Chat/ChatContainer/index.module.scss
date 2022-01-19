@@ -6,14 +6,12 @@
 	width: 100%;
 	background: #0f1012;
 	box-shadow: 0.3125rem 0.3125rem 0.625rem rgba(0, 0, 0, 0.25);
-	border-radius: 0.625rem;
-	height: 18.75rem;
-	position: relative;
-	box-sizing: border-box;
-	padding: 1rem;
+	height: calc(100vh - 9rem);
 	overflow-y: scroll;
 	overflow-x: hidden;
 	margin-bottom: 1rem;
+	box-sizing: border-box;
+	position: relative;
 	&::-webkit-scrollbar {
 		width: 0.2rem;
 	}
@@ -24,6 +22,11 @@
 		background: $textColor20;
 		border-radius: 100rem;
 	}
+	padding: 1rem;
+}
+.mini {
+	height: 15rem;
+	border-radius: 0.625rem;
 }
 
 .imageLabel {

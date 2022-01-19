@@ -49,7 +49,7 @@ export default function LoginForm() {
 			switch (res.payload.response?.data) {
 				case 'Wrong password': {
 					toast.error('Wrong password !', {
-						position: 'bottom-right',
+						position: 'bottom-left',
 						autoClose: 5000,
 						hideProgressBar: false,
 						closeOnClick: true,
@@ -63,7 +63,7 @@ export default function LoginForm() {
 				}
 				case 'User not found': {
 					toast.error('Gmail not found!', {
-						position: 'bottom-right',
+						position: 'bottom-left',
 						autoClose: 3000,
 						hideProgressBar: false,
 						closeOnClick: true,
@@ -80,7 +80,7 @@ export default function LoginForm() {
 						setIsLoading(false)
 						navigate('/')
 						toast.success('Login succesful!', {
-							position: 'bottom-right',
+							position: 'bottom-left',
 							autoClose: 3000,
 							hideProgressBar: false,
 							closeOnClick: true,
@@ -92,7 +92,7 @@ export default function LoginForm() {
 					} else {
 						setIsLoading(false)
 						toast.error('Something wrong!', {
-							position: 'bottom-right',
+							position: 'bottom-left',
 							autoClose: 3000,
 							hideProgressBar: false,
 							closeOnClick: true,

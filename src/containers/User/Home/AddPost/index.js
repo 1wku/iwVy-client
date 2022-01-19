@@ -57,7 +57,7 @@ export default function AddPost() {
 				success: 'Uploading image successful!',
 			},
 			{
-				position: 'bottom-right',
+				position: 'bottom-left',
 				autoClose: 3000,
 				hideProgressBar: false,
 				closeOnClick: true,
@@ -90,7 +90,7 @@ export default function AddPost() {
 	const handleAddPost = () => {
 		if (!value) {
 			toast.error('Post have not been empty', {
-				position: 'bottom-right',
+				position: 'bottom-left',
 				autoClose: 3000,
 				hideProgressBar: false,
 				closeOnClick: true,

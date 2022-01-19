@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { chatAPI } from 'apis/chatAPI'
+import { toast } from 'react-toastify'
 import { tuturu } from 'service/Notification'
 
 const initialState = {
@@ -72,9 +73,53 @@ const handleSendMessage = (state, action) => {
 	state.messages.push(action.payload)
 }
 
-export const handleUpdateMessage = (state, action) => {
+const handleUpdateMessage = (state, action) => {
 	state.messages.push(action.payload)
 	tuturu()
+}
+
+export const createConversation = createAsyncThunk(
+	'chat/createConversation',
+	async (data, thunkAPI) => {
+		try {
+			const res = await chatAPI.createConversation(data)
+			return res?.data
+		} catch (error) {
+			thunkAPI.rejectWithValue(error)
+		}
+	},
+)
+
+const handleCreateConversation = (state, action) => {
+	state.conversations.push(action.payload)
+}
+
+export const removeConversation = createAsyncThunk(
+	'chat/removeConversation',
+	async (data, thunkAPI) => {
+		try {
+			chatAPI.removeConversation(data)
+		} catch (error) {
+			thunkAPI.rejectWithValue(error)
+		}
+	},
+)
+
+const handleRemoveConversation = (state, action) => {
+	toast.success('Remove successfully!', {
+		position: "bottom-left",
+		autoClose: 5000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true,
+		progress: undefined,
+		});
+	console.log(action.payload)
+	state.conversations.splice(
+		state.conversations.indexOf(action.payload),
+		1,
+	)
 }
 
 const chatSlide = createSlice({
@@ -90,6 +135,8 @@ const chatSlide = createSlice({
 		[getConversations.fulfilled]: handleGetConversations,
 		[setConversation.fulfilled]: handleSetConversation,
 		[sendMessage.fulfilled]: handleSendMessage,
+		[createConversation.fulfilled]: handleCreateConversation,
+		[removeConversation.fulfilled]: handleRemoveConversation,
 	},
 })
 

@@ -64,7 +64,7 @@ export const followUser = createAsyncThunk(
 	async (data, thunkAPI) => {
 		try {
 			const res = await userAPI.followUser(data)
-			return res?.data
+			return { status: res?.data, id: data.followId }
 		} catch (error) {
 			return thunkAPI.rejectWithValue(error)
 		}
@@ -103,7 +103,8 @@ const handleSavePost = (state, action) => {
 }
 
 const handleFollowUser = (state, action) => {
-	console.log(action.payload)
+
+
 }
 
 const userSlice = createSlice({

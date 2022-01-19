@@ -10,4 +10,10 @@ export const chatAPI = {
 	sendMessage(body) {
 		return requestAPI('/messages', 'POST', body)
 	},
+	createConversation(body) {
+		return requestAPI(`/conversations`, 'POST', body)
+	},
+	removeConversation(id) {
+		return requestAPI(`/conversations/${id}`, 'DELETE')
+	},
 }

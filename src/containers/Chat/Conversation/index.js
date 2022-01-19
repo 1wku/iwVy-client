@@ -6,12 +6,21 @@ import { useNavigate } from 'react-router-dom'
 import styles from './index.module.scss'
 import { IconWrapper } from 'components/UI'
 import { ReactComponent as Phone } from 'assets/icons/phone.svg'
-import { setConversation, setLoading } from 'data/slices/chatSlice'
+import { ReactComponent as Trash } from 'assets/icons/trash.svg'
+import {
+	removeConversation,
+	setConversation,
+	setLoading,
+} from 'data/slices/chatSlice'
+import { onPopup, offPopup } from 'data/slices/backdropSlice'
+import clsx from 'clsx'
+import DeletePopup from './DeletePopup'
 
 export default function Conversation({
 	conversation,
 	mini,
 	setLabelImg,
+	current,
 }) {
 	const navigative = useNavigate()
 	const dispatch = useDispatch()
@@ -43,6 +52,26 @@ export default function Conversation({
 		navigative(`/meetting/${user._id}`)
 	}
 
+	const handleAgree = () => {
+		dispatch(offPopup())
+		dispatch(removeConversation(conversation._id))
+	}
+
+	const handleRemove = () => {
+		dispatch(
+			onPopup(
+				<DeletePopup
+					name={user.username}
+					handleOff={() => {
+						dispatch(offPopup())
+					}}
+					handleAgree={handleAgree}
+				/>,
+			),
+		)
+		//
+	}
+
 	return (
 		<>
 			{mini ? (
@@ -62,7 +91,37 @@ export default function Conversation({
 					</span>
 				</div>
 			) : (
-				<div></div>
+				<div
+					onClick={handleClick}
+					className={clsx(styles.container, {
+						[styles.current]: current,
+					})}
+				>
+					<span className={styles.group}>
+						<WrapAvatar
+							url={user?.avatar}
+							handleClick={user?.handleClick}
+						/>
+						<span className={styles.username}>
+							{user?.username} <span>online</span>
+						</span>
+					</span>
+
+					<span className={styles.group}>
+						<span
+							className={styles.phone}
+							onClick={handleRemove}
+						>
+							<IconWrapper icon={<Trash />} />
+						</span>
+						<span
+							className={styles.phone}
+							onClick={handleCall}
+						>
+							<IconWrapper icon={<Phone />} />
+						</span>
+					</span>
+				</div>
 			)}
 		</>
 	)

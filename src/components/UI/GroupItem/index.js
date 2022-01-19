@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { useNavigate } from 'react-router-dom'
 
 import { ReactComponent as Personicon } from 'assets/icons/person.svg'
+import defaultAvatar from 'assets/images/defaultAvatar.jpg'
 import styles from './index.module.scss'
 import { IconWrapper } from '..'
 
@@ -24,12 +25,12 @@ export default function GroupItem({
 		>
 			{svg ? (
 				<IconWrapper icon={icon} />
-			) : icon !== '' && icon ? (
-				<img src={icon} className={styles.icon} alt="" />
 			) : (
-				<span className={clsx(styles.iconSvg)}>
-					<Personicon />
-				</span>
+				<img
+					src={icon || defaultAvatar}
+					className={styles.icon}
+					alt=""
+				/>
 			)}
 			<span className={styles.text}>{text}</span>
 		</li>
