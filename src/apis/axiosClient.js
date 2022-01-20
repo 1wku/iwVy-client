@@ -6,7 +6,7 @@ export default async function request(url, method, body, params) {
 	const headers = {
 		'Content-Type': 'application/json',
 		'Access-Control-Allow-Origin':
-			'http://localhost:3000',
+			'*',
 	}
 	const paramsFormarted = queryString.stringify(params)
 
