@@ -1,11 +1,13 @@
 import { createContext, useState, useRef, useEffect, useCallback } from 'react'
 import { io } from 'socket.io-client'
 import Peer from 'simple-peer'
-import { useSelector } from 'react-redux'
 
 const SocketContext = createContext()
 
-const socket = io('/')
+//const socket = io('http://localhost:3009/', { transports: ['websocket'] })
+const socket = io('https://tinevy.herokuapp.com/', {
+    transports: ['websocket'],
+})
 
 const ContextProvider = ({ children }) => {
     const userId = localStorage.getItem('userId')
