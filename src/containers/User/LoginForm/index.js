@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { toast, ToastContainer } from 'react-toastify'
@@ -132,7 +132,12 @@ export default function LoginForm() {
 			</div>
 			<Divider text="Or" />
 			<div className={styles.signInWith}>
-				<ButtonBasic text="Google" theme="fat" color="red" />
+				<ButtonBasic
+					handleClick={() => {}}
+					text="Google"
+					theme="fat"
+					color="red"
+				/>
 				<ButtonBasic text="Github" theme="fat" color="gray" />
 			</div>
 			<div>

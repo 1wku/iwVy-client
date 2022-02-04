@@ -2,11 +2,8 @@ import { useEffect, useRef, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import Feed from 'containers/User/Home/Feed'
-import Sidebar from 'views/layouts/Sidebar'
-import Toolbar from 'views/layouts/Toolbar'
 import styles from './index.module.scss'
 import { getTimeLine, setLoading } from 'data/slices/postSlice'
-import { getMe } from 'data/slices/userSlice'
 
 export default function Home() {
 	const dispatch = useDispatch()
@@ -68,7 +65,7 @@ export default function Home() {
 			<Feed
 				posts={posts}
 				addPost
-				ref={timelineRef}
+				ref={timelineRef	}
 				loading={loading}
 				error={error}
 			/>

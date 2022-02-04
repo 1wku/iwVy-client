@@ -7,7 +7,9 @@ const initialState = {
 	conversations: [],
 	currentConversation: {},
 	messages: [],
+	next: 1,
 	loading: false,
+	nonScroll: false,
 }
 
 export const getConversations = createAsyncThunk(
@@ -15,12 +17,8 @@ export const getConversations = createAsyncThunk(
 	async (data, thunkAPI) => {
 		try {
 			const res = await chatAPI.getConversations(data)
-			const resMessage = await chatAPI.getMessages(
-				res?.data[0]._id,
-			)
 			return {
 				conversations: res?.data,
-				messages: resMessage?.data,
 			}
 		} catch (e) {
 			thunkAPI.rejectWithValue(e)
@@ -28,18 +26,26 @@ export const getConversations = createAsyncThunk(
 	},
 )
 
-const handleGetConversations = (state, action) => {
-	state.conversations = action.payload.conversations
-	state.currentConversation = action.payload.conversations[0]
-	state.messages = action.payload.messages
-	state.loading = false
-}
+export const getMessages = createAsyncThunk(
+	'chat/getMessages',
+	async (data, thunkAPI) => {
+		try {
+			const res = await chatAPI.getMessages(data)
+			return {...res?.data, more: data?.more}
+		} catch (error) {
+			thunkAPI.rejectWithValue(error)
+		}
+	},
+)
 
 export const setConversation = createAsyncThunk(
 	'chat/setConversation',
 	async (data, thunkAPI) => {
 		try {
-			const resmessage = await chatAPI.getMessages(data._id)
+			const resmessage = await chatAPI.getMessages({
+				id: data._id,
+				next: 1,
+			})
 			return {
 				id: data,
 				messages: resmessage?.data,
@@ -50,12 +56,6 @@ export const setConversation = createAsyncThunk(
 		}
 	},
 )
-
-const handleSetConversation = (state, action) => {
-	state.currentConversation = action.payload.conversation
-	state.messages = action.payload.messages
-	state.loading = false
-}
 
 export const sendMessage = createAsyncThunk(
 	'chat/sendMessage',
@@ -69,15 +69,6 @@ export const sendMessage = createAsyncThunk(
 	},
 )
 
-const handleSendMessage = (state, action) => {
-	state.messages.push(action.payload)
-}
-
-const handleUpdateMessage = (state, action) => {
-	state.messages.push(action.payload)
-	tuturu()
-}
-
 export const createConversation = createAsyncThunk(
 	'chat/createConversation',
 	async (data, thunkAPI) => {
@@ -90,10 +81,6 @@ export const createConversation = createAsyncThunk(
 	},
 )
 
-const handleCreateConversation = (state, action) => {
-	state.conversations.push(action.payload)
-}
-
 export const removeConversation = createAsyncThunk(
 	'chat/removeConversation',
 	async (data, thunkAPI) => {
@@ -105,21 +92,53 @@ export const removeConversation = createAsyncThunk(
 	},
 )
 
+const handleGetConversations = (state, action) => {
+	state.conversations = action.payload.conversations
+	state.currentConversation = action.payload.conversations[0]
+    state.loading = false
+}
+
+const handleSendMessage = (state, action) => {
+	state.messages.push(action.payload)
+}
+
+const handleUpdateMessage = (state, action) => {
+	state.messages.push(action.payload)
+	tuturu()
+}
+
+const handleCreateConversation = (state, action) => {
+	state.conversations.push(action.payload)
+}
+
+const handleSetConversation = (state, action) => {
+	state.currentConversation = action.payload.conversation
+	state.messages = action.payload.messages.messages
+	state.next = action.payload.messages.next
+	state.loading = false
+}
+
 const handleRemoveConversation = (state, action) => {
 	toast.success('Remove successfully!', {
-		position: "bottom-left",
+		position: 'bottom-left',
 		autoClose: 5000,
 		hideProgressBar: false,
 		closeOnClick: true,
 		pauseOnHover: true,
 		draggable: true,
 		progress: undefined,
-		});
+	})
 	console.log(action.payload)
 	state.conversations.splice(
 		state.conversations.indexOf(action.payload),
 		1,
 	)
+}
+
+const handleGetMessages = (state, action) => {
+	state.messages.splice(0, 0, ...action.payload.messages)
+	state.next = action.payload.next
+    state.nonScroll = action.payload.more
 }
 
 const chatSlide = createSlice({
@@ -129,6 +148,9 @@ const chatSlide = createSlice({
 		setLoading: (state, action) => {
 			state.loading = action.payload
 		},
+		setNonScroll: (state, action) => {
+			state.nonScroll = action.payload
+		},
 		updateMessage: handleUpdateMessage,
 	},
 	extraReducers: {
@@ -137,9 +159,10 @@ const chatSlide = createSlice({
 		[sendMessage.fulfilled]: handleSendMessage,
 		[createConversation.fulfilled]: handleCreateConversation,
 		[removeConversation.fulfilled]: handleRemoveConversation,
+		[getMessages.fulfilled]: handleGetMessages,
 	},
 })
 
 export default chatSlide.reducer
 
-export const { setLoading, updateMessage } = chatSlide.actions
+export const { setLoading, updateMessage, setNonScroll } = chatSlide.actions

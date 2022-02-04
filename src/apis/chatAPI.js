@@ -4,8 +4,13 @@ export const chatAPI = {
 	getConversations(id) {
 		return requestAPI(`/conversations/${id}`, 'GET')
 	},
-	getMessages(id) {
-		return requestAPI(`/messages/${id}`, 'GET')
+	getMessages({ id, next }) {
+		return requestAPI(
+			`/messages/${id}`,
+			'GET',
+			{},
+			{ page: next, limit: 20 },
+		)
 	},
 	sendMessage(body) {
 		return requestAPI('/messages', 'POST', body)

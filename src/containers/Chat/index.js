@@ -1,31 +1,42 @@
-import { useState, useEffect, useRef, useContext } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Divider, HorSlider } from 'components/UI'
+import { IconWrapper } from 'components/UI'
 import ChatItem from './ChatItem'
 import ChatContainer from './ChatContainer'
 import ChatInput from './ChatInput'
 import styles from './index.module.scss'
-import Conversation from 'containers/Chat/Conversation'
 import {
 	getConversations,
+	getMessages,
 	sendMessage,
+	setConversation,
 	setLoading,
+	setNonScroll,
 	updateMessage,
 } from 'data/slices/chatSlice'
 import { getOnlineUsers } from 'data/slices/userSlice'
 import defaultAvatar from 'assets/images/defaultAvatar.jpg'
 import socket from 'service/SocketContext'
 import ChatInfo from './ChatInfo'
-import { ReactComponent as Option } from 'assets/icons/threedot.svg'
+import { ReactComponent as Return } from 'assets/icons/return.svg'
+import clsx from 'clsx'
+import ChatConversation from './ChatConversation'
 
 export default function Chat({ mini }) {
 	const dispatch = useDispatch()
 	const scrollRef = useRef()
-
+	const [showMess, setShowMess] = useState(true)
 	const userId = localStorage.getItem('userId')
-	const { conversations, messages, loading, currentConversation } =
-		useSelector(state => state.chat)
+
+	const {
+		conversations,
+		messages,
+		next,
+		loading,
+		currentConversation,
+		nonScroll,
+	} = useSelector(state => state.chat)
 	const me = useSelector(state => state.user)
 
 	const [labelImg, setLabelImg] = useState(defaultAvatar)
@@ -53,17 +64,28 @@ export default function Chat({ mini }) {
 				}),
 			)
 		})
+		currentConversation._id &&
+			dispatch(
+				getMessages({ id: currentConversation._id, next: 1 }),
+			)
 		return () => {
 			socket.removeListener('getMessage')
 		}
 	}, [currentConversation])
 
 	useEffect(() => {
-		scrollRef?.current &&
-			scrollRef?.current.scrollIntoView({ behavior: 'smooth' })
+		console.log(nonScroll)
+		if (scrollRef?.current && !nonScroll) {
+			scrollRef?.current.scrollIntoView({
+				behavior: 'smooth',
+			})
+		}
+		else dispatch(setNonScroll(false))
 	}, [messages])
 
-	const handleSubmit = e => {
+
+
+	const handleSubmit = () => {
 		const receiverId = currentConversation.members.find(id => {
 			return id !== userId
 		})
@@ -85,97 +107,61 @@ export default function Chat({ mini }) {
 		setMessage('')
 	}
 
-	if (!mini) {
-		return (
-			<div className={styles.container}>
-				<div className={styles.left}>
-					{conversations?.length > 0 &&
-						conversations.map((conversation, index) => (
-							<Conversation
-								key={index}
-								conversation={conversation}
-								setLabelImg={setLabelImg}
-								current={
-									currentConversation._id ===
-									conversation._id
-								}
-							/>
-						))}
-				</div>
-				<div className={styles.right}>
-					<ChatInfo />
-					<ChatContainer
-						labelImg={labelImg}
-						loading={loading}
-						ref={scrollRef}
-						nonlabel
-						heigthFill
-					>
-						{messages.map((message, index) => (
-							<ChatItem
-								ref={
-									index === messages.length - 1
-										? scrollRef
-										: null
-								}
-								key={index}
-								text={message.text}
-								mine={
-									message.sendBy === me.myInfo._id
-								}
-								createdAt={message.createdAt}
-							/>
-						))}
-					</ChatContainer>
-					<ChatInput
-						value={message}
-						setValue={setMessage}
-						handleSubmit={handleSubmit}
-					/>
-				</div>
-			</div>
-		)
-	}
 	return (
-		<div className={styles.miniChat}>
-			{/* <span className={styles.label}>Recently</span> */}
-			<HorSlider>
-				{conversations?.length > 0 &&
-					conversations.map((conversation, index) => (
-						<Conversation
+		<div className={styles[mini ? 'miniChat' : 'container']}>
+			{!showMess && (
+				<span
+					className={styles.backButton}
+					onClick={() => setShowMess(prev => !prev)}
+				>
+					<IconWrapper icon={<Return />} />
+				</span>
+			)}
+			<ChatConversation
+				mini={mini}
+				conversations={conversations}
+				styles={styles}
+				setLabelImg={setLabelImg}
+				currentConversation={currentConversation}
+				setShowMess={setShowMess}
+			/>
+			<div
+				className={clsx(styles.right, {
+					[styles.show]: !showMess,
+				})}
+			>
+				<ChatInfo />
+				<ChatContainer
+					labelImg={labelImg}
+					loading={loading}
+					ref={scrollRef}
+					id={currentConversation._id}
+					next={next}
+					mini={mini}
+					nonlabel={!mini}
+					heigthFill={!mini}
+				>
+					{messages.map((message, index) => (
+						<ChatItem
+							ref={
+								index === messages.length - 1
+									? scrollRef
+									: null
+							}
 							key={index}
-							conversation={conversation}
-							setLabelImg={setLabelImg}
-							mini
+							text={message.text}
+							mine={message.sendBy === me.myInfo._id}
+							createdAt={message.createdAt}
+							mini={mini}
 						/>
 					))}
-			</HorSlider>
-			<ChatContainer
-				labelImg={labelImg}
-				loading={loading}
-				ref={scrollRef}
-				mini
-			>
-				{messages.map((message, index) => (
-					<ChatItem
-						ref={
-							index === messages.length - 1
-								? scrollRef
-								: null
-						}
-						key={index}
-						text={message.text}
-						mine={message.sendBy === me.myInfo._id}
-						createdAt={message.createdAt}
-						mini
-					/>
-				))}
-			</ChatContainer>
-			<ChatInput
-				value={message}
-				setValue={setMessage}
-				handleSubmit={handleSubmit}
-			/>
+				</ChatContainer>
+				<ChatInput
+					value={message}
+					setValue={setMessage}
+					handleSubmit={handleSubmit}
+				/>
+			</div>
 		</div>
 	)
 }

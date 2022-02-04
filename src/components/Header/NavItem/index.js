@@ -4,8 +4,11 @@ import { useNavigate } from 'react-router-dom'
 export default function NavItem({ path, icon, text }) {
 	const navigate = useNavigate()
 	return (
-		<li className={styles.navItem} onClick={() => navigate(path)}>
-			{icon && <span className={styles.navIcon}>{icon}</span>}
+		<li
+			className={styles.navItem}
+			onClick={() => path && navigate(path)}
+		>
+			{icon && icon}
 			{text && <span className={styles.navText}>{text}</span>}
 		</li>
 	)

@@ -11,15 +11,15 @@ import App from './App'
 import store from './data/store'
 
 ReactDOM.render(
-	<React.StrictMode>
-		<Provider store={store}>
-			<ContextProvider>
-				<BrowserRouter>
-					<App />
-					<ToastContainer pauseOnFocusLoss={false} />
-				</BrowserRouter>
-			</ContextProvider>
-		</Provider>
-	</React.StrictMode>,
-	document.getElementById('root'),
+    <React.StrictMode>
+        <Provider store={store}>
+            <ContextProvider>
+                <BrowserRouter>
+                    <App />
+                    <ToastContainer pauseOnFocusLoss={false} />
+                </BrowserRouter>
+            </ContextProvider>
+        </Provider>
+    </React.StrictMode>,
+    document.getElementById('root'),
 )

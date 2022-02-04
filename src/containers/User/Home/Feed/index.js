@@ -19,4 +19,4 @@ function Feed({ posts, addPost, loading, error, firstChild }, ref) {
 		</div>
 	)
 }
-export default forwardRef(Feed)
+export default forwardRef(Feed) 

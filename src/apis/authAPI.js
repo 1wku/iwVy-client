@@ -7,4 +7,5 @@ export const authAPI = {
 	register(body) {
 		return requestAPI('/auth/register', 'POST', body)
 	},
+	
 }
