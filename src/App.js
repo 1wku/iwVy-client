@@ -94,6 +94,7 @@ export default function App() {
             dispatch(getMe({ userId }))
         }
     }, [userId])
+
     return (
         <>
             <AnimatePresence>
